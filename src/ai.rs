@@ -85,7 +85,7 @@ impl ImageGenClient {
             if image_gen_response.status == "succeeded" {
                 let image_url = image_gen_response.output.unwrap()[0].clone();
                 download_image(&image_url).await?;
-                // run a command open output.png
+
                 std::process::Command::new("open")
                     .arg("output.png")
                     .output()
