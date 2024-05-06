@@ -11,5 +11,8 @@ async fn main() {
         std::process::exit(1);
     });
 
-    askitty::run(config).await;
+    askitty::run(config).await.unwrap_or_else(|err| {
+        eprintln!("Application error: {}", err);
+        std::process::exit(1);
+    });
 }
