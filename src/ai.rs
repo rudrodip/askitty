@@ -1,5 +1,6 @@
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use termimad;
 
 pub struct LLMClient {
     pub host: String,
@@ -32,7 +33,8 @@ impl LLMClient {
             Ok(res) => {
                 let body = res.text().await.unwrap();
                 let completion: Completion = serde_json::from_str(&body).unwrap();
-                println!("{}", completion.choices[0].message.content);
+                let message = &completion.choices[0].message.content;
+                termimad::print_text(&message);
             }
             Err(err) => {
                 println!("{}", err);
