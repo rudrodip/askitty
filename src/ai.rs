@@ -1,5 +1,5 @@
 use reqwest::Client;
-use serde::{Deserialize, Serialize};
+use crate::types::*;
 use std::{error::Error, io::Write};
 
 pub struct LLMClient {
@@ -110,83 +110,4 @@ pub async fn download_image(url: &str) -> Result<(), Box<dyn Error>> {
     let mut file = std::fs::File::create("output.png")?;
     file.write_all(&body)?;
     Ok(())
-}
-
-// llm completion response
-#[derive(Serialize, Deserialize)]
-struct Completion {
-    id: String,
-    object: String,
-    created: i64,
-    model: String,
-    system_fingerprint: String,
-    choices: Vec<Choice>,
-    usage: Usage,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Choice {
-    index: i32,
-    message: Message,
-    logprobs: Option<Logprobs>,
-    finish_reason: String,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Message {
-    role: String,
-    content: String,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Logprobs {
-    token_logprobs: Vec<f32>,
-    top_logprobs: Vec<TopLogprobs>,
-}
-
-#[derive(Serialize, Deserialize)]
-struct TopLogprobs {
-    token: String,
-    logprob: f32,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Usage {
-    prompt_tokens: i32,
-    completion_tokens: i32,
-    total_tokens: i32,
-}
-
-// image generation response
-#[derive(Serialize, Deserialize)]
-struct ImageGenResponse {
-    id: String,
-    model: String,
-    version: String,
-    input: Input,
-    logs: String,
-    output: Option<Vec<String>>,
-    error: Option<String>,
-    status: String,
-    created_at: String,
-    started_at: Option<String>,
-    completed_at: Option<String>,
-    urls: Urls,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Input {
-    guidance_scale: f32,
-    height: i32,
-    num_inference_steps: i32,
-    num_outputs: i32,
-    prompt: String,
-    scheduler: String,
-    width: i32,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Urls {
-    cancel: String,
-    get: String,
 }
