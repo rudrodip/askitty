@@ -3,7 +3,7 @@ pub mod ai;
 
 use std::error::Error;
 use cli::{Config, Command};
-use ai::LLMClient;
+use ai::{LLMClient, ImageGenClient};
 use std::env;
 use termimad;
 
@@ -12,6 +12,14 @@ pub async fn run(config: Config) -> Result<(), Box<dyn Error>> {
         env::var("LLM_HOST").unwrap(),
         env::var("LLM_MODEL").unwrap(),
         env::var("LLM_API_KEY").unwrap(),
+    ).unwrap_or_else(|err| {
+        panic!("{}", err);
+    });
+
+    let image_client = ImageGenClient::new(
+        env::var("REPLICATE_HOST").unwrap(),
+        env::var("IMAGE_MODEL_VERSION").unwrap(),
+        env::var("REPLICATE_API_KEY").unwrap(),
     ).unwrap_or_else(|err| {
         panic!("{}", err);
     });
@@ -26,7 +34,7 @@ pub async fn run(config: Config) -> Result<(), Box<dyn Error>> {
         
         },
         Command::Imagine(message) => {
-            println!("Imagine: {}", message);
+            image_client.run(&message).await?;
             Ok(())
         },
     }
