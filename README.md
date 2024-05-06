@@ -11,8 +11,8 @@ askitty hello how are you
 - [x] groq api
 - [x] markdown preview
 - [ ] streaming output
-- [ ] optional flags
-- [ ] image generation api
-- [ ] error handling
+- [x] optional flags
+- [x] image generation api
+- [x] error handling
 - [ ] tests
 - [ ] documentation
