@@ -1,5 +1,6 @@
 pub mod cli;
 pub mod ai;
+pub mod types;
 
 use std::error::Error;
 use cli::{Config, Command};
