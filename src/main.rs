@@ -6,7 +6,7 @@ use std::env;
 async fn main() {
     dotenv::dotenv().ok();
 
-    let config = askitty::Config::new(env::args()).unwrap_or_else(|_err| {
+    let config = askitty::cli::Config::new(env::args()).unwrap_or_else(|_err| {
         eprintln!("Problem parsing arguments");
         std::process::exit(1);
     });
