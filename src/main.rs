@@ -5,18 +5,11 @@ use std::env;
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
-    let mut args = env::args();
-    args.next();
 
-    let query = args.collect::<Vec<String>>().join(" ");
-
-    let client = askitty::LLMClient::new(
-        env::var("LLM_HOST").unwrap(),
-        env::var("LLM_MODEL").unwrap(),
-        env::var("LLM_API_KEY").unwrap(),
-    ).unwrap_or_else(|err| {
-        panic!("{}", err);
+    let config = askitty::Config::new(env::args()).unwrap_or_else(|_err| {
+        eprintln!("Problem parsing arguments");
+        std::process::exit(1);
     });
 
-    let _ = client.run(&query).await; // Add .await to use the future
+    askitty::run(config).await;
 }
