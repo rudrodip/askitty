@@ -5,6 +5,7 @@ extern crate serde_json;
 use reqwest::Client;
 use serde::{Serialize, Deserialize};
 use std::env;
+use std::fs;
 
 /*
 -h or --help: Display help message
@@ -18,6 +19,23 @@ pub enum Command {
     Version,
     Message(String),
     Imagine(String),
+}
+
+pub fn help() {
+    println!("Usage: askitty [FLAG] [MESSAGE]");
+    println!();
+    println!("Flags:");
+    println!("  -h, --help       Display help message");
+    println!("  -v, --version    Display version");
+    println!("  -m, --message    Message to send to the model");
+    println!("  -i, --imagine    Generate image from text");
+}
+
+pub fn version() {
+    let contents = fs::read_to_string("Cargo.toml")
+        .expect("Something went wrong reading the file");
+    let version = contents.lines().nth(2).unwrap().split(" = ").nth(1).unwrap();
+    println!("Version: {}", version);
 }
 
 pub struct Config {
@@ -108,10 +126,10 @@ pub async fn run(config: Config) {
 
     match config.command {
         Command::Help => {
-            println!("Help message");
+            help();
         },
         Command::Version => {
-            println!("Version message");
+            version();
         },
         Command::Message(message) => {
             let _ = client.run(&message).await;
