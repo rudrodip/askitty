@@ -1,4 +1,4 @@
-use std::fs;
+use std::{error::Error, fs};
 
 pub enum Command {
     Help,
@@ -44,7 +44,7 @@ impl Config {
     }
 }
 
-pub fn help() {
+pub fn help() -> Result<(), Box<dyn Error>> {
     println!("Usage: askitty [FLAG] [MESSAGE]");
     println!();
     println!("Flags:");
@@ -52,11 +52,15 @@ pub fn help() {
     println!("  -v, --version    Display version");
     println!("  -m, --message    Message to send to the model");
     println!("  -i, --imagine    Generate image from text");
+
+    Ok(())
 }
 
-pub fn version() {
+pub fn version() -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string("Cargo.toml")
         .expect("Something went wrong reading the file");
     let version = contents.lines().nth(2).unwrap().split(" = ").nth(1).unwrap();
     println!("Version: {}", version);
+
+    Ok(())
 }
