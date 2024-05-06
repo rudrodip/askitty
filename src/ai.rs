@@ -1,6 +1,6 @@
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use termimad;
+use std::error::Error;
 
 pub struct LLMClient {
     pub host: String,
@@ -17,29 +17,23 @@ impl LLMClient {
         })
     }
 
-    pub async fn run(&self, query: &str) {
+    pub async fn run(&self, query: &str) -> Result<String, Box<dyn Error>> {
         let query = query.trim();
         let url = format!("{}/chat/completions", self.host);
         let data = format!("{{\"model\": \"{}\",\"messages\": [{{\"role\": \"system\",\"content\": \"You are a helpful assistant.\"}},{{\"role\": \"user\",\"content\": \"{}\"}}]}}", self.model, query);
         let client = Client::new();
-        let res = client.post(&url)
+        let res = client
+            .post(&url)
             .header("Content-Type", "application/json")
             .header("Authorization", format!("Bearer {}", self.api_key))
             .body(data)
             .send()
-            .await;
+            .await?;
 
-        match res {
-            Ok(res) => {
-                let body = res.text().await.unwrap();
-                let completion: Completion = serde_json::from_str(&body).unwrap();
-                let message = &completion.choices[0].message.content;
-                termimad::print_text(&message);
-            }
-            Err(err) => {
-                println!("{}", err);
-            }
-        }
+        let body = res.text().await?;
+        let completion: Completion = serde_json::from_str(&body).unwrap();
+        let message = &completion.choices[0].message.content;
+        return Ok(message.clone());
     }
 }
 
