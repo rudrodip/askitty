@@ -9,7 +9,7 @@ askitty hello how are you
 ```
 
 - [x] groq api
-- [ ] markdown preview
+- [x] markdown preview
 - [ ] streaming output
 - [ ] optional flags
 - [ ] image generation api
