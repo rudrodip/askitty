@@ -1,4 +1,4 @@
-# askitty 
+# askitty
 
 ## Description
 
@@ -7,7 +7,7 @@ A simple CLI tool to interact with generative models like llms and image generat
 LLM api - [groq](https://groq.com/)
 Image generation api - [stable diffusion](https://replicate.com/stability-ai/stable-diffusion)
 
-Usage: 
+Usage:
 
 ```bash
 askitty [FLAG] [MESSAGE]
