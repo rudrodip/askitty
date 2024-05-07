@@ -9,10 +9,11 @@ askitty hello how are you
 ```
 
 - [x] groq api
-- [x] markdown preview
-- [ ] streaming output
 - [x] optional flags
+- [x] markdown preview
 - [x] image generation api
 - [x] error handling
+- [ ] openai crate
+- [ ] streaming output
 - [ ] tests
 - [ ] documentation
