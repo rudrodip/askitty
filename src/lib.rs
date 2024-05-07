@@ -32,7 +32,6 @@ pub async fn run(config: Config) -> Result<(), Box<dyn Error>> {
             let response = llm_client.run(&message).await?;
             termimad::print_text(&response);
             Ok(())
-        
         },
         Command::Imagine(message) => {
             image_client.run(&message).await?;
