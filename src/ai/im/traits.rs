@@ -1,7 +1,7 @@
 use crate::errors::ImageGenError;
 
 pub trait IM {
-    fn new() -> Result<Self, &'static str>
+    fn new() -> Result<Self, ImageGenError>
     where
         Self: Sized;
     fn generate(
