@@ -12,15 +12,16 @@ pub struct Client {
 
 impl LLM for Client {
     fn new() -> Result<Self, LLMError> {
-        let host = var("LLM_HOST").unwrap();
-        let model = var("LLM_MODEL").unwrap();
-        let api_key = var("LLM_API_KEY").unwrap();
+        let host = var("LLM_HOST").map_err(|e| LLMError::Other(e.to_string()))?;
+        let model = var("LLM_MODEL").map_err(|e| LLMError::Other(e.to_string()))?;
+        let api_key = var("LLM_API_KEY").map_err(|e| LLMError::Other(e.to_string()))?;
         Ok(Client {
             host,
             model,
             api_key,
         })
     }
+
     async fn completion(&self, chats: Vec<Message>) -> Result<String, LLMError> {
         let data = format!(
             "{{\"model\": \"{}\",\"messages\": {}}}",
