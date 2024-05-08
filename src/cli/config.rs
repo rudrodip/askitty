@@ -1,6 +1,8 @@
 use std::env;
 use std::error::Error;
 
+use super::utils::print_help;
+
 #[derive(Debug)]
 pub enum Command {
     Help,
@@ -19,6 +21,7 @@ impl Config {
         let args: Vec<String> = env::args().collect();
 
         if args.len() < 2 {
+            print_help()?;
             return Err("No command provided".into());
         }
 
@@ -37,7 +40,7 @@ impl Config {
                 }
                 Command::Imagine(args[2].clone())
             }
-            _ => return Err("Invalid command".into()),
+            _ => Command::Help,
         };
 
         Ok(Config { command })
