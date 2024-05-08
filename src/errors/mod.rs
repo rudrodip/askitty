@@ -57,7 +57,7 @@ impl fmt::Display for ImageGenError {
             ImageGenError::APIError(msg) => write!(f, "API Error: {}", msg),
             ImageGenError::DownloadError(msg) => write!(f, "Download Error: {}", msg),
             ImageGenError::ReqwestError(err) => write!(f, "Reqwest Error: {}", err),
-            ImageGenError::SerializationError(msg) =>  write!(f, "Serialization Error: {}", msg),
+            ImageGenError::SerializationError(msg) => write!(f, "Serialization Error: {}", msg),
             ImageGenError::IOError(err) => write!(f, "IO Error: {}", err),
             ImageGenError::Other(msg) => write!(f, "Other Error: {}", msg),
         }
