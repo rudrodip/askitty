@@ -3,11 +3,10 @@ pub mod ai;
 pub mod types;
 pub mod errors;
 
-pub fn run() {
-    let config = cli::config::Config::new().unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
-        std::process::exit(1);
-    });
+use std::error::Error;
 
-    cli::run(config);
+use cli::config::Config;
+
+pub async fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    Ok(cli::run(config).await.unwrap())
 }
