@@ -11,11 +11,11 @@ pub struct Client {
 }
 
 impl IM for Client {
-    fn new() -> Result<Self, &'static str> {
-        let host = var("REPLICATE_HOST").unwrap();
-        let version = var("IMAGE_MODEL_VERSION").unwrap();
-        let api_key = var("REPLICATE_API_KEY").unwrap();
-
+    fn new() -> Result<Self, ImageGenError> {
+        let host = var("REPLICATE_HOST").map_err(|e| ImageGenError::Other(e.to_string()))?;
+        let version =
+            var("IMAGE_MODEL_VERSION").map_err(|e| ImageGenError::Other(e.to_string()))?;
+        let api_key = var("REPLICATE_API_KEY").map_err(|e| ImageGenError::Other(e.to_string()))?;
         Ok(Client {
             host,
             version,
@@ -35,90 +35,51 @@ impl IM for Client {
             .header("Authorization", format!("Bearer {}", self.api_key))
             .body(data)
             .send()
-            .await;
+            .await?;
 
-        let res = match res {
-            Ok(res) => res,
-            Err(e) => {
-                return Err(ImageGenError::APIError(e.to_string()));
-            }
-        };
-
-        let body = res.text().await;
-        let body = match body {
-            Ok(body) => body,
-            Err(e) => {
-                return Err(ImageGenError::APIError(e.to_string()));
-            }
-        };
-        let image_gen_response: ImageGenResponse = serde_json::from_str(&body).unwrap();
+        let body = res.text().await?;
+        let image_gen_response: ImageGenResponse = serde_json::from_str(&body)?;
         let url = &image_gen_response.urls.get;
-
         let mut count = 0;
+
         loop {
             let res = client
                 .get(url)
                 .header("Authorization", format!("Bearer {}", self.api_key))
                 .send()
-                .await;
-            let res = match res {
-                Ok(res) => res,
-                Err(e) => {
-                    return Err(ImageGenError::APIError(e.to_string()));
-                }
-            };
-            let body = res.text().await;
-            let body = match body {
-                Ok(body) => body,
-                Err(e) => {
-                    return Err(ImageGenError::APIError(e.to_string()));
-                }
-            };
-            let image_gen_response: ImageGenResponse = serde_json::from_str(&body).unwrap();
+                .await?;
+
+            let body = res.text().await?;
+            let image_gen_response: ImageGenResponse = serde_json::from_str(&body)?;
+
             if image_gen_response.status == "succeeded" {
                 let image_url = image_gen_response.output.unwrap()[0].clone();
                 download_image(&image_url).await?;
-
                 std::process::Command::new("open")
                     .arg("output.png")
                     .output()
                     .expect("failed to execute process");
                 break;
             }
+
             if count == 5 {
                 break;
             }
+
             count += 1;
             std::thread::sleep(std::time::Duration::from_secs(1));
             println!("Generating image...");
         }
+
         Ok(())
     }
 }
 
 async fn download_image(url: &str) -> Result<(), ImageGenError> {
     let client = HttpClient::new();
-    let res = client.get(url).send().await;
-    let res = match res {
-        Ok(res) => res,
-        Err(e) => {
-            return Err(ImageGenError::DownloadError(e.to_string()));
-        }
-    };
-    let body = res.bytes().await;
-    let body = match body {
-        Ok(body) => body,
-        Err(e) => {
-            return Err(ImageGenError::DownloadError(e.to_string()));
-        }
-    };
-    let file = std::fs::File::create("output.png");
-    let mut file = match file {
-        Ok(file) => file,
-        Err(e) => {
-            return Err(ImageGenError::DownloadError(e.to_string()));
-        }
-    };
-    file.write_all(&body).unwrap();
+    let res = client.get(url).send().await?;
+    let body = res.bytes().await?;
+    let mut file = std::fs::File::create("output.png")?;
+    file.write_all(&body)?;
     Ok(())
 }
