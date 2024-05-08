@@ -1,11 +1,10 @@
-pub mod cli;
 pub mod ai;
-pub mod types;
+pub mod cli;
 pub mod errors;
-
-use std::error::Error;
+pub mod types;
 
 use cli::config::Config;
+use std::error::Error;
 
 pub async fn run(config: Config) -> Result<(), Box<dyn Error>> {
     Ok(cli::run(config).await.unwrap())
