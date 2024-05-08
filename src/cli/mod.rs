@@ -11,14 +11,8 @@ use termimad;
 
 pub async fn run(config: Config) -> Result<(), Box<dyn Error>> {
     match config.command {
-        config::Command::Help => {
-            print_help();
-            Ok(())
-        }
-        config::Command::Version => {
-            print_version();
-            Ok(())
-        }
+        config::Command::Help => print_help(),
+        config::Command::Version => print_version(),
         config::Command::Message(message) => {
             let client = LLMClient::new().unwrap();
             let chats = vec![Message {
@@ -38,7 +32,7 @@ pub async fn run(config: Config) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn print_help() {
+fn print_help() -> Result<(), Box<dyn Error>> {
     println!("Usage: askitty [FLAG] [MESSAGE]");
     println!();
     println!("Flags:");
@@ -46,9 +40,11 @@ fn print_help() {
     println!("  -v, --version    Display version");
     println!("  -m, --message    Message to send to the model");
     println!("  -i, --imagine    Generate image from text");
+
+    Ok(())
 }
 
-fn print_version() {
+fn print_version() -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string("Cargo.toml").expect("Something went wrong reading the file");
     let version = contents
         .lines()
@@ -58,4 +54,5 @@ fn print_version() {
         .nth(1)
         .unwrap();
     println!("Version: {}", version);
+    Ok(())
 }
