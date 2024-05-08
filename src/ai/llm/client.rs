@@ -11,7 +11,7 @@ pub struct Client {
 }
 
 impl LLM for Client {
-    fn new() -> Result<Self, &'static str> {
+    fn new() -> Result<Self, LLMError> {
         let host = var("LLM_HOST").unwrap();
         let model = var("LLM_MODEL").unwrap();
         let api_key = var("LLM_API_KEY").unwrap();
@@ -34,19 +34,10 @@ impl LLM for Client {
             .header("Authorization", format!("Bearer {}", self.api_key))
             .body(data)
             .send()
-            .await;
-        match res {
-            Ok(res) => {
-                let body = res.text().await;
-                match serde_json::from_str::<Completion>(&body.unwrap()) {
-                    Ok(output) => {
-                        let response = output.choices[0].message.content.clone();
-                        Ok(response)
-                    }
-                    Err(e) => Err(LLMError::SerializationError(e.to_string())),
-                }
-            }
-            Err(e) => Err(LLMError::APIError(e.to_string())),
-        }
+            .await?;
+        let body = res.text().await?;
+        let completion: Completion = serde_json::from_str(&body)?;
+        let message = completion.choices[0].message.content.to_owned();
+        Ok(message)
     }
 }
