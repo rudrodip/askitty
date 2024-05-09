@@ -45,6 +45,39 @@ where
             termimad::print_text(&response);
             Ok(())
         }
+        config::Command::REPL => {
+            let mut prompt = String::new();
+            loop {
+                prompt = utils::read_line()?;
+                if prompt.is_empty() {
+                    break;
+                }
+
+                let chat = Message {
+                    role: String::from("user"),
+                    content: prompt.clone(),
+                };
+                chat_history.push_back(chat);
+                let chats: Vec<Message> = chat_history.iter().cloned().collect();
+                let response = llm_client.completion(chats).await?;
+
+                chat_history.push_back(Message {
+                    role: String::from("assistant"),
+                    content: response.clone(),
+                });
+
+                storage
+                    .set("CHAT_HISTORY", &chat_history)
+                    .map_err(|e| Box::new(e) as Box<dyn Error>)?;
+
+                termimad::print_text(&response);
+
+                if prompt == "exit" {
+                    break;
+                }
+            }
+            Ok(())
+        }
         config::Command::Imagine(prompt) => {
             Ok(im_client.generate(prompt).await?)
         }
