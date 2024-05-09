@@ -23,3 +23,9 @@ pub fn print_version() -> Result<(), Box<dyn Error>> {
     println!("Version: {}", version);
     Ok(())
 }
+
+pub fn read_line() -> Result<String, Box<dyn Error>> {
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input)?;
+    Ok(input.trim().to_string())
+}
