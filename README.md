@@ -19,6 +19,7 @@ Flags:
 -h, --help       Display help message
 -v, --version    Display version
 -m, --message    Message to send to the model
+-r, --repl       Start a repl
 -i, --imagine    Generate image from text
 ```
 
@@ -31,6 +32,10 @@ Todo
 - [x] error handling
 - [ ] streaming output
 - [x] chat history
+- [ ] new chat session command
+- [ ] view chat history command
+- [ ] set configuration command
+- [ ] view configuration command
 - [ ] pretty print
 - [x] kv store
 - [ ] config store
