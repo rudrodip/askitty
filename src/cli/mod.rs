@@ -46,13 +46,11 @@ where
             Ok(())
         }
         config::Command::REPL => {
-            let mut prompt = String::new();
             loop {
-                prompt = utils::read_line()?;
-                if prompt.is_empty() {
+                let prompt = utils::read_line()?;
+                if prompt == "exit" {
                     break;
                 }
-
                 let chat = Message {
                     role: String::from("user"),
                     content: prompt.clone(),
@@ -71,10 +69,6 @@ where
                     .map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
                 termimad::print_text(&response);
-
-                if prompt == "exit" {
-                    break;
-                }
             }
             Ok(())
         }
