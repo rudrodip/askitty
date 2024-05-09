@@ -19,7 +19,7 @@ pub struct Choice {
     pub finish_reason: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Message {
     pub role: String,
     pub content: String,
