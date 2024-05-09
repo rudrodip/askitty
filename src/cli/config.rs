@@ -8,6 +8,7 @@ pub enum Command {
     Help,
     Version,
     Message(String),
+    REPL,
     Imagine(String),
 }
 
@@ -33,6 +34,13 @@ impl Config {
                     return Err("No message provided".into());
                 }
                 Command::Message(args[2].clone())
+            }
+            "-r" | "--repl" => {
+                // there should be no prompt provided
+                if args.len() > 2 {
+                    return Err("No prompt should be provided".into());
+                }
+                Command::REPL
             }
             "-i" | "--imagine" => {
                 if args.len() < 3 {
