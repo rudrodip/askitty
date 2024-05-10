@@ -17,4 +17,5 @@ pub trait Storage {
     fn load_from_json<T>(&self, key: &str, path: PathBuf) -> Result<(), Error>
     where
         T: for<'a> Deserialize<'a> + Serialize;
+    fn iter_keys(&self) -> Result<Vec<String>, Error>;
 }
