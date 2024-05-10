@@ -1,8 +1,7 @@
-// cli/repl.rs
 use crate::ai::llm::traits::LLM;
+use crate::cli::utils;
 use crate::storage::Storage;
 use crate::types::llm::{Message, Session};
-use crate::cli::utils;
 use std::error::Error;
 use std::io::{self, Write};
 use termimad;
@@ -68,7 +67,7 @@ async fn repl_loop<L: LLM>(
         let mut chats = vec![];
         let system_message = Message {
             role: "system".to_string(),
-            content: global_system_prompt.clone() + &session.system_prompt.clone()
+            content: global_system_prompt.clone() + &session.system_prompt.clone(),
         };
         chats.push(system_message);
         chats.extend(session.history.clone());
