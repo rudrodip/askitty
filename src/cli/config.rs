@@ -63,7 +63,7 @@ impl Config {
                 } else {
                     Command::ShowSession(args[2].clone())
                 }
-            },
+            }
             "-d" | "--delete" => {
                 if args.len() < 3 {
                     return Err("No session id provided".into());
@@ -81,7 +81,7 @@ impl Config {
                 } else {
                     Command::SessionSystemPrompt(args[2].clone(), args[3].clone())
                 }
-            },
+            }
             "-ps" | "--prompt-show" => Command::ShowGlobalSystemPrompt,
             "-pc" | "--prompt-clear" => Command::ClearGlobalSystemPrompt,
             "-pd" | "--prompt-delete" => {
