@@ -68,7 +68,6 @@ impl Session {
 
 impl Display for Session {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // Session name | Id: id | Created: natural datetime | ChatCount: count
         write!(
             f,
             "{} | Id: {} | Created: {} | ChatCount: {}",
