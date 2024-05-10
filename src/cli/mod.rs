@@ -1,13 +1,12 @@
 pub mod config;
-pub mod utils;
+mod utils;
+mod repl;
 
 use crate::ai::{im::traits::IM, llm::traits::LLM};
-use crate::types::llm::Message;
 use crate::storage::Storage;
+use crate::types::llm::Message;
 use config::Config;
-use std::{collections::VecDeque, error::Error, io::{self, Write}};
-use termimad;
-use whoami;
+use std::error::Error;
 
 pub async fn run<L, I>(config: Config, storage: impl Storage) -> Result<(), Box<dyn Error>>
 where
@@ -16,71 +15,38 @@ where
 {
     let llm_client = L::new()?;
     let im_client = I::new()?;
-    let mut chat_history: VecDeque<Message> = storage
-        .get("CHAT_HISTORY")
-        .unwrap_or_default()
-        .unwrap_or_default();
 
     match config.command {
         config::Command::Help => utils::print_help(),
         config::Command::Version => utils::print_version(),
-        config::Command::Message(message) => {
-            let chat = Message {
-                role: String::from("user"),
-                content: message,
-            };
-            chat_history.push_back(chat);
-            let chats: Vec<Message> = chat_history.iter().cloned().collect();
-            let response = llm_client.completion(chats).await?;
-
-            chat_history.push_back(Message {
-                role: String::from("assistant"),
-                content: response.clone(),
-            });
-
-            storage
-                .set("CHAT_HISTORY", &chat_history)
-                .map_err(|e| Box::new(e) as Box<dyn Error>)?;
-
-            termimad::print_text(&response);
-            Ok(())
-        }
-        config::Command::REPL => {
-            let username = whoami::username();
-            loop {
-                print!("{}: ", username);
-                io::stdout().flush()?;
-                let prompt = utils::read_line()?;
-                if prompt == "exit" {
-                    print!("Goodbye! 👋\n");
-                    break;
-                }
-
-                print!("kitty 🐱: ");
-                io::stdout().flush()?;
-                let chat = Message {
-                    role: String::from("user"),
-                    content: prompt.clone(),
-                };
-                chat_history.push_back(chat);
-                let chats: Vec<Message> = chat_history.iter().cloned().collect();
-                let response = llm_client.completion(chats).await?;
-
-                chat_history.push_back(Message {
-                    role: String::from("assistant"),
-                    content: response.clone(),
-                });
-
-                storage
-                    .set("CHAT_HISTORY", &chat_history)
-                    .map_err(|e| Box::new(e) as Box<dyn Error>)?;
-
-                termimad::print_text(&response);
-            }
-            Ok(())
-        }
-        config::Command::Imagine(prompt) => {
-            Ok(im_client.generate(prompt).await?)
-        }
+        config::Command::Message(message) => handle_message(&llm_client, message).await,
+        config::Command::REPL => repl::start_repl(&llm_client, &storage).await,
+        config::Command::ShowAllSessions => utils::show_all_sessions(&storage),
+        config::Command::ShowSession(session_id) => utils::show_session(&storage, &session_id),
+        config::Command::DeleteSession(session_id) => utils::delete_session(&storage, &session_id),
+        config::Command::ClearAllSessions => utils::clear_sessions(&storage),
+        config::Command::NewSession => repl::start_new_session(&llm_client, &storage).await,
+        config::Command::GlobalSystemPrompt(system_prompt) => {
+            utils::set_global_system_prompt(&storage, &system_prompt)
+        },
+        config::Command::SessionSystemPrompt(session_id, system_prompt) => {
+            utils::set_session_system_prompt(&storage, &session_id, &system_prompt)
+        },
+        config::Command::ShowGlobalSystemPrompt => utils::show_global_system_prompt(&storage),
+        config::Command::ClearGlobalSystemPrompt => utils::clear_global_system_prompt(&storage),
+        config::Command::DeleteSessionSystemPrompt(session_id) => {
+            utils::delete_session_system_prompt(&storage, &session_id)
+        },
+        config::Command::Imagine(prompt) => Ok(im_client.generate(prompt).await?),
     }
+}
+
+async fn handle_message<L: LLM>(llm_client: &L, message: String) -> Result<(), Box<dyn Error>> {
+    let chat = Message {
+        role: String::from("user"),
+        content: message,
+    };
+    let response = llm_client.completion(vec![chat]).await?;
+    utils::print_text(&response);
+    Ok(())
 }
