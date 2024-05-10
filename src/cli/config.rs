@@ -9,6 +9,16 @@ pub enum Command {
     Version,
     Message(String),
     REPL,
+    ShowAllSessions,
+    ShowSession(String),
+    DeleteSession(String),
+    ClearAllSessions,
+    NewSession,
+    GlobalSystemPrompt(String),
+    SessionSystemPrompt(String, String),
+    ShowGlobalSystemPrompt,
+    ClearGlobalSystemPrompt,
+    DeleteSessionSystemPrompt(String),
     Imagine(String),
 }
 
@@ -46,6 +56,39 @@ impl Config {
                     return Err("No prompt provided".into());
                 }
                 Command::Imagine(args[2].clone())
+            }
+            "-s" | "--sessions" => {
+                if args.len() < 3 {
+                    Command::ShowAllSessions
+                } else {
+                    Command::ShowSession(args[2].clone())
+                }
+            },
+            "-d" | "--delete" => {
+                if args.len() < 3 {
+                    return Err("No session id provided".into());
+                }
+                Command::DeleteSession(args[2].clone())
+            }
+            "-c" | "--clear" => Command::ClearAllSessions,
+            "-n" | "--new" => Command::NewSession,
+            "-p" | "--prompt" => {
+                if args.len() < 3 {
+                    return Err("No prompt provided".into());
+                }
+                if args.len() < 4 {
+                    Command::GlobalSystemPrompt(args[2].clone())
+                } else {
+                    Command::SessionSystemPrompt(args[2].clone(), args[3].clone())
+                }
+            },
+            "-ps" | "--prompt-show" => Command::ShowGlobalSystemPrompt,
+            "-pc" | "--prompt-clear" => Command::ClearGlobalSystemPrompt,
+            "-pd" | "--prompt-delete" => {
+                if args.len() < 3 {
+                    return Err("No session id provided".into());
+                }
+                Command::DeleteSessionSystemPrompt(args[2].clone())
             }
             _ => Command::Help,
         };
