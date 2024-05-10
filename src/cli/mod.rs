@@ -1,6 +1,6 @@
 pub mod config;
-mod utils;
 mod repl;
+mod utils;
 
 use crate::ai::{im::traits::IM, llm::traits::LLM};
 use crate::storage::Storage;
@@ -28,15 +28,15 @@ where
         config::Command::NewSession => repl::start_new_session(&llm_client, &storage).await,
         config::Command::GlobalSystemPrompt(system_prompt) => {
             utils::set_global_system_prompt(&storage, &system_prompt)
-        },
+        }
         config::Command::SessionSystemPrompt(session_id, system_prompt) => {
             utils::set_session_system_prompt(&storage, &session_id, &system_prompt)
-        },
+        }
         config::Command::ShowGlobalSystemPrompt => utils::show_global_system_prompt(&storage),
         config::Command::ClearGlobalSystemPrompt => utils::clear_global_system_prompt(&storage),
         config::Command::DeleteSessionSystemPrompt(session_id) => {
             utils::delete_session_system_prompt(&storage, &session_id)
-        },
+        }
         config::Command::Imagine(prompt) => Ok(im_client.generate(prompt).await?),
     }
 }
