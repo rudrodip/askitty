@@ -1,5 +1,5 @@
-use std::path::PathBuf;
 use crate::storage::KvStore;
+use std::path::PathBuf;
 
 pub fn initialize_storage() -> KvStore {
     let db_path = PathBuf::from("./data/db");
