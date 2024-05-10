@@ -17,7 +17,7 @@ pub async fn start_repl<L: LLM>(
         None => {
             let new_session = Session::new();
             storage
-                .set(&new_session.id, &new_session)
+                .set(&format!("sessions/{}", &new_session.id), &new_session)
                 .map_err(|e| Box::new(e) as Box<dyn Error>)?;
             new_session
         }
@@ -34,7 +34,7 @@ pub async fn start_new_session<L: LLM>(
 ) -> Result<(), Box<dyn Error>> {
     let mut session = Session::new();
     storage
-        .set(&session.id, &session)
+        .set(&format!("sessions/{}", &session.id), &session)
         .map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
     repl_loop(llm_client, storage, &mut session).await?;
