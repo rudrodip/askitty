@@ -1,5 +1,5 @@
-use std::fmt::Display;
 use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 
 #[derive(Serialize, Deserialize)]
 pub struct Completion {
@@ -73,7 +73,9 @@ impl Display for Session {
             "{} | Id: {} | Created: {} | ChatCount: {}",
             self.name,
             self.id,
-            chrono::DateTime::from_timestamp(self.created_at, 0).expect("Invalid timestamp").to_rfc2822(),
+            chrono::DateTime::from_timestamp(self.created_at, 0)
+                .expect("Invalid timestamp")
+                .to_rfc2822(),
             self.history.len()
         )
     }
@@ -81,11 +83,6 @@ impl Display for Session {
 
 impl Display for Message {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}: {}",
-            self.role,
-            self.content
-        )
+        write!(f, "{}: {}", self.role, self.content)
     }
 }
