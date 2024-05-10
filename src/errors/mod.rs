@@ -1,5 +1,5 @@
-use std::{error::Error, fmt, io};
 use bincode::Error as BincodeError;
+use std::{error::Error, fmt, io};
 
 #[derive(Debug)]
 pub enum LLMError {
