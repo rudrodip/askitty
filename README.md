@@ -16,11 +16,21 @@ askitty [FLAG] [MESSAGE]
 Flags:
 
 ```bash
--h, --help       Display help message
--v, --version    Display version
--m, --message    Message to send to the model
--r, --repl       Start a repl
--i, --imagine    Generate image from text
+-h, --help                          Display help message
+-v, --version                       Display version
+-m, --message                       Message to send to the model
+-r, --repl                          Start a repl
+-n, --new                           Start a new session
+-s, --sessions                      View all sessions
+-s <session_id>                     View a specific session
+-d <session_id>                     Delete a specific session
+-c, --clear                         Clear all sessions
+-p, --prompt                        Set global system prompt
+-p <session_id>                     Set a specific session prompt
+-ps, --prompt-show                  Show global system prompt
+-pc, --prompt-clear                 Clear global system prompt
+-pd, --prompt-delete <session_id>   Delete a specific session prompt              
+-i, --imagine                       Generate image from text
 ```
 
 Todo
@@ -32,8 +42,10 @@ Todo
 - [x] error handling
 - [ ] streaming output
 - [x] chat history
-- [ ] new chat session command
-- [ ] view chat history command
+- [x] new chat session command
+- [x] view chat history command
+- [x] global system prompt
+- [x] individual system prompt
 - [ ] set configuration command
 - [ ] view configuration command
 - [ ] pretty print
