@@ -128,7 +128,10 @@ pub fn clear_sessions(storage: &impl Storage) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-pub fn set_global_system_prompt(storage: &impl Storage, prompt: &str) -> Result<(), Box<dyn Error>> {
+pub fn set_global_system_prompt(
+    storage: &impl Storage,
+    prompt: &str,
+) -> Result<(), Box<dyn Error>> {
     storage
         .set("GLOBAL_SYSTEM_PROMPT", &prompt)
         .map_err(|e| Box::new(e) as Box<dyn Error>)?;
