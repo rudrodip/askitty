@@ -1,9 +1,9 @@
 pub mod ai;
 pub mod cli;
 pub mod errors;
-pub mod types;
-pub mod storage;
 pub mod setup;
+pub mod storage;
+pub mod types;
 
 use ai::im::client::Client as IMClient;
 use ai::llm::client::Client as LLMClient;
