@@ -5,9 +5,9 @@ use crate::ai::{im::traits::IM, llm::traits::LLM};
 use crate::types::llm::Message;
 use crate::storage::Storage;
 use config::Config;
-use std::collections::VecDeque;
-use std::error::Error;
+use std::{collections::VecDeque, error::Error, io::{self, Write}};
 use termimad;
+use whoami;
 
 pub async fn run<L, I>(config: Config, storage: impl Storage) -> Result<(), Box<dyn Error>>
 where
@@ -46,11 +46,18 @@ where
             Ok(())
         }
         config::Command::REPL => {
+            let username = whoami::username();
             loop {
+                print!("{}: ", username);
+                io::stdout().flush()?;
                 let prompt = utils::read_line()?;
                 if prompt == "exit" {
+                    print!("Goodbye! 👋\n");
                     break;
                 }
+
+                print!("kitty 🐱: ");
+                io::stdout().flush()?;
                 let chat = Message {
                     role: String::from("user"),
                     content: prompt.clone(),
