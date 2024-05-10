@@ -159,6 +159,14 @@ pub fn set_session_system_prompt(
     }
 }
 
+pub fn get_global_system_prompt(storage: &impl Storage) -> Result<String, Box<dyn Error>> {
+    match storage.get::<String>("GLOBAL_SYSTEM_PROMPT") {
+        Ok(Some(prompt)) => Ok(prompt),
+        Ok(None) => Ok(String::new()),
+        Err(e) => Err(Box::new(e) as Box<dyn Error>),
+    }
+}
+
 pub fn show_global_system_prompt(storage: &impl Storage) -> Result<(), Box<dyn Error>> {
     match storage.get::<String>("GLOBAL_SYSTEM_PROMPT") {
         Ok(Some(prompt)) => {
