@@ -36,12 +36,14 @@ pub fn find_latest_session(storage: &impl Storage) -> Option<Session> {
     let mut latest_session: Option<Session> = None;
     let mut latest_timestamp: i64 = 0;
 
-    if let Ok(session_ids) = storage.iter_keys() {
-        for session_id in session_ids {
-            if let Ok(Some(session)) = storage.get::<Session>(&session_id) {
-                if session.created_at > latest_timestamp {
-                    latest_session = Some(session.clone());
-                    latest_timestamp = session.created_at
+    if let Ok(keys) = storage.iter_keys() {
+        for key in keys {
+            if key.starts_with("sessions/") {
+                if let Ok(Some(session)) = storage.get::<Session>(&key) {
+                    if session.created_at > latest_timestamp {
+                        latest_session = Some(session.clone());
+                        latest_timestamp = session.created_at
+                    }
                 }
             }
         }
@@ -53,10 +55,12 @@ pub fn find_latest_session(storage: &impl Storage) -> Option<Session> {
 pub fn find_all_sessions(storage: &impl Storage) -> Result<Vec<Session>, Box<dyn Error>> {
     let mut sessions: Vec<Session> = vec![];
 
-    if let Ok(session_ids) = storage.iter_keys() {
-        for session_id in session_ids {
-            if let Ok(Some(session)) = storage.get::<Session>(&session_id) {
-                sessions.push(session.clone());
+    if let Ok(keys) = storage.iter_keys() {
+        for key in keys {
+            if key.starts_with("sessions/") {
+                if let Ok(Some(session)) = storage.get::<Session>(&key) {
+                    sessions.push(session.clone());
+                }
             }
         }
     }
@@ -81,7 +85,8 @@ pub fn show_all_sessions(storage: &impl Storage) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn show_session(storage: &impl Storage, session_id: &str) -> Result<(), Box<dyn Error>> {
-    match storage.get::<Session>(&session_id) {
+    let session_key = format!("sessions/{}", session_id);
+    match storage.get::<Session>(&session_key) {
         Ok(Some(session)) => {
             println!("{}", session);
             println!("System prompt: {}", session.system_prompt);
@@ -101,7 +106,8 @@ pub fn show_session(storage: &impl Storage, session_id: &str) -> Result<(), Box<
 }
 
 pub fn delete_session(storage: &impl Storage, session_id: &str) -> Result<(), Box<dyn Error>> {
-    match storage.delete(&session_id) {
+    let session_key = format!("sessions/{}", session_id);
+    match storage.delete(&session_key) {
         Ok(_) => {
             println!("Session deleted");
             Ok(())
@@ -111,13 +117,15 @@ pub fn delete_session(storage: &impl Storage, session_id: &str) -> Result<(), Bo
 }
 
 pub fn clear_sessions(storage: &impl Storage) -> Result<(), Box<dyn Error>> {
-    match storage.clear() {
-        Ok(_) => {
-            println!("All sessions deleted");
-            Ok(())
+    if let Ok(keys) = storage.iter_keys() {
+        for key in keys {
+            if key.starts_with("sessions/") {
+                storage.delete(&key)?;
+            }
         }
-        Err(e) => Err(Box::new(e) as Box<dyn Error>),
     }
+    println!("All sessions deleted");
+    Ok(())
 }
 
 pub fn set_global_system_prompt(storage: &impl Storage, prompt: &str) -> Result<(), Box<dyn Error>> {
@@ -133,11 +141,12 @@ pub fn set_session_system_prompt(
     session_id: &str,
     prompt: &str,
 ) -> Result<(), Box<dyn Error>> {
-    match storage.get::<Session>(&session_id) {
+    let session_key = format!("sessions/{}", session_id);
+    match storage.get::<Session>(&session_key) {
         Ok(Some(mut session)) => {
             session.system_prompt = prompt.to_string();
             storage
-                .set(&session_id, &session)
+                .set(&session_key, &session)
                 .map_err(|e| Box::new(e) as Box<dyn Error>)?;
             println!("Session system prompt set to: {}", prompt);
             Ok(())
@@ -178,11 +187,12 @@ pub fn delete_session_system_prompt(
     storage: &impl Storage,
     session_id: &str,
 ) -> Result<(), Box<dyn Error>> {
-    match storage.get::<Session>(&session_id) {
+    let session_key = format!("sessions/{}", session_id);
+    match storage.get::<Session>(&session_key) {
         Ok(Some(mut session)) => {
             session.system_prompt = String::new();
             storage
-                .set(&session_id, &session)
+                .set(&session_key, &session)
                 .map_err(|e| Box::new(e) as Box<dyn Error>)?;
             println!("Session system prompt cleared");
             Ok(())
