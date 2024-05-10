@@ -36,7 +36,6 @@ impl Config {
                 Command::Message(args[2].clone())
             }
             "-r" | "--repl" => {
-                // there should be no prompt provided
                 if args.len() > 2 {
                     return Err("No prompt should be provided".into());
                 }
