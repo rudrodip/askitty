@@ -48,6 +48,7 @@ async fn repl_loop<L: LLM>(
     session: &mut Session,
 ) -> Result<(), Box<dyn Error>> {
     let username = whoami::username();
+    let global_system_prompt = utils::get_global_system_prompt(storage)?;
     loop {
         print!("{}: ", username);
         io::stdout().flush()?;
@@ -64,7 +65,14 @@ async fn repl_loop<L: LLM>(
             content: prompt.clone(),
         };
         session.history.push(chat);
-        let response = llm_client.completion(session.history.clone()).await?;
+        let mut chats = vec![];
+        let system_message = Message {
+            role: "system".to_string(),
+            content: global_system_prompt.clone() + &session.system_prompt.clone()
+        };
+        chats.push(system_message);
+        chats.extend(session.history.clone());
+        let response = llm_client.completion(chats).await?;
 
         session.history.push(Message {
             role: String::from("assistant"),
