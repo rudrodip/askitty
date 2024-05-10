@@ -63,4 +63,10 @@ impl Storage for KvStore {
         let value = serde_json::from_str::<T>(&contents)?;
         self.set(key, &value)
     }
+
+    fn iter_keys(&self) -> Result<Vec<String>, Error> {
+        let db = self.open_db()?;
+        let keys = db.iter().keys().map(|k| k.map(|k| String::from_utf8(k.to_vec()).unwrap()));
+        keys.collect::<Result<Vec<String>, _>>().map_err(Error::from)
+    }
 }
