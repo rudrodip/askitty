@@ -1,7 +1,7 @@
 use crate::errors::StorageError as Error;
 use crate::storage::traits::Storage;
 use serde::{Deserialize, Serialize};
-use std::{path::PathBuf, fs};
+use std::{fs, path::PathBuf};
 
 pub struct KvStore {
     db_path: PathBuf,
@@ -45,9 +45,7 @@ impl Storage for KvStore {
 
     fn delete(&self, key: &str) -> Result<(), Error> {
         let db = self.open_db()?;
-        db.remove(key.as_bytes())
-            .map(|_| ())
-            .map_err(Error::from)
+        db.remove(key.as_bytes()).map(|_| ()).map_err(Error::from)
     }
 
     fn clear(&self) -> Result<(), Error> {
@@ -66,7 +64,11 @@ impl Storage for KvStore {
 
     fn iter_keys(&self) -> Result<Vec<String>, Error> {
         let db = self.open_db()?;
-        let keys = db.iter().keys().map(|k| k.map(|k| String::from_utf8(k.to_vec()).unwrap()));
-        keys.collect::<Result<Vec<String>, _>>().map_err(Error::from)
+        let keys = db
+            .iter()
+            .keys()
+            .map(|k| k.map(|k| String::from_utf8(k.to_vec()).unwrap()));
+        keys.collect::<Result<Vec<String>, _>>()
+            .map_err(Error::from)
     }
 }
