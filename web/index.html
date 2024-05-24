@@ -1,11 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>askitty</title>
-</head>
-<body>
-  
-</body>
+  <head>
+    <title>AskItty: One CLI to Rule Them All 🐱</title>
+    <meta
+      name="description"
+      content="AskItty is the ultimate command-line interface (CLI) tool that lets you harness the power of thousands of language models (LLMs) and image generation APIs with a single, unified tool. With just a few keystrokes and some simple configurations, you can seamlessly interact with any LLM or image generation API that follows the OpenAI standard. Say goodbye to juggling multiple tools and hello to AskItty, the one CLI to rule them all!"
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="AskItty: One CLI to Rule Them All 🐱" />
+    <meta
+      property="og:description"
+      content="AskItty is the ultimate command-line interface (CLI) tool that lets you harness the power of thousands of language models (LLMs) and image generation APIs with a single, unified tool. With just a few keystrokes and some simple configurations, you can seamlessly interact with any LLM or image generation API that follows the OpenAI standard. Say goodbye to juggling multiple tools and hello to AskItty, the one CLI to rule them all!"
+    />
+    <meta property="og:image" content="https://askitty.rdsx.dev/og.png" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AskItty: One CLI to Rule Them All 🐱" />
+    <meta
+      name="twitter:description"
+      content="AskItty is the ultimate command-line interface (CLI) tool that lets you harness the power of thousands of language models (LLMs) and image generation APIs with a single, unified tool. With just a few keystrokes and some simple configurations, you can seamlessly interact with any LLM or image generation API that follows the OpenAI standard. Say goodbye to juggling multiple tools and hello to AskItty, the one CLI to rule them all!"
+    />
+    <meta name="twitter:image" content="https://askitty.rdsx.dev/og.png" />
+
+    <!-- Discord -->
+    <meta name="discord:title" content="AskItty: One CLI to Rule Them All 🐱" />
+    <meta
+      name="discord:description"
+      content="AskItty is the ultimate command-line interface (CLI) tool that lets you harness the power of thousands of language models (LLMs) and image generation APIs with a single, unified tool. With just a few keystrokes and some simple configurations, you can seamlessly interact with any LLM or image generation API that follows the OpenAI standard. Say goodbye to juggling multiple tools and hello to AskItty, the one CLI to rule them all!"
+    />
+    <meta name="discord:image" content="https://askitty.rdsx.dev/og.png" />
+
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1 class="heading">
+        <a href="https://github.com/rudrodip/askitty" target="_blank">
+          askitty
+        </a>
+      </h1>
+      <h3>one CLI to rule them all</h3>
+      <p>
+        With just a few keystrokes and some simple configurations, you can
+        seamlessly interact with any LLM or image generation API that follows
+        the OpenAI standard. Say goodbye to juggling multiple tools and hello to
+        AskItty, the one CLI to rule them all!
+      </p>
+
+      <div class="link-container">
+        <a href="https://github.com/rudrodip/askitty" target="_blank">github</a>
+        <a href="https://x.com/rds_agi" target="_blank">x</a>
+        <a href="./doc/askitty/index.html">docs</a>
+      </div>
+
+      <div style="font-size: 0.9rem;">
+        <p>Usage:</p>
+        <pre><code class="lang-bash">askitty <span class="hljs-string">[FLAG]</span> <span class="hljs-string">[MESSAGE]</span>
+</code></pre>
+<br />
+        <p>Flags:</p>
+        <pre><code class="lang-bash">-<span class="ruby">h, --help                          Display help message
+</span>-<span class="ruby">v, --version                       Display version
+</span>-<span class="ruby">m, --message                       Message to send to the model
+</span>-<span class="ruby">i, --imagine                       Generate image from text
+</span>-<span class="ruby">r, --repl                          Start a repl
+</span>-<span class="ruby">n, --new                           Start a new session
+</span>-<span class="ruby">s, --sessions                      View all sessions
+</span>-<span class="ruby">s &lt;session_id&gt;                     View a specific session
+</span>-<span class="ruby">d &lt;session_id&gt;                     Delete a specific session
+</span>-<span class="ruby">c, --clear                         Clear all sessions
+</span>-<span class="ruby">p, --prompt                        Set global system prompt
+</span>-<span class="ruby">p &lt;session_id&gt;                     Set a specific session prompt
+</span>-<span class="ruby">ps, --prompt-show                  Show global system prompt
+</span>-<span class="ruby">pc, --prompt-clear                 Clear global system prompt
+</span>-<span class="ruby">pd, --prompt-delete &lt;session_id&gt;   Delete a specific session prompt              
+</span>-<span class="ruby">vc, --view-config                  View global configuration
+</span>-<span class="ruby">sc, --set-config                   Set global configuration</span>
+</code></pre>
+      </div>
+    </main>
+  </body>
 </html>

@@ -1,0 +1,52 @@
+html,
+body {
+  background-color: rgb(56, 56, 56);
+  color: antiquewhite;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: antiquewhite;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  height: 100vh;
+}
+
+.heading:hover {
+  text-decoration: underline;
+}
+
+.container {
+  width: 100%;
+  max-width: 40rem;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+p {
+  font-size: 1.2rem;
+  line-height: normal;
+}
+
+.link-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.link-container a {
+  color: rgb(35, 157, 227);
+  text-decoration: underline;
+}
