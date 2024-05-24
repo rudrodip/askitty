@@ -91,7 +91,7 @@ impl Config {
                     return Err("No session id provided".into());
                 }
                 Command::DeleteSessionSystemPrompt(args[2].clone())
-            },
+            }
             "-vc" | "--view-config" => Command::ViewConfig,
             "-sc" | "--set-config" => Command::SetConfig,
             _ => Command::Help,

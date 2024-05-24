@@ -3,8 +3,8 @@ use std::io::Write;
 use crate::ai::im::traits::IM;
 use crate::errors::ImageGenError;
 use crate::types::im::ImageResponse;
-use reqwest::Client as HttpClient;
 use dirs::desktop_dir;
+use reqwest::Client as HttpClient;
 
 pub struct Client {
     pub host: String,
@@ -55,7 +55,10 @@ impl IM for Client {
         let filename = format!("{}.png", query);
         download_image(&image_url, path.to_str().unwrap(), &filename).await?;
 
-        println!("Image downloaded successfully, saved to {}", path.to_str().unwrap());
+        println!(
+            "Image downloaded successfully, saved to {}",
+            path.to_str().unwrap()
+        );
         open_image(format!("{}/{}", path.to_str().unwrap(), filename).as_str())?;
 
         Ok(())
@@ -73,7 +76,7 @@ async fn download_image(url: &str, path: &str, filename: &str) -> Result<(), Ima
 
 fn open_image(path: &str) -> Result<(), ImageGenError> {
     let os = std::env::consts::OS;
-    
+
     match os {
         "macos" => {
             let _ = std::process::Command::new("open")

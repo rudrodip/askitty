@@ -102,7 +102,6 @@ pub fn config_setup_cli() -> Result<(), Box<dyn Error>> {
     std::io::stdin().read_line(&mut input).unwrap();
     llm_api_key = input.trim().to_string();
 
-
     println!("Let's start by setting up the image model");
 
     println!("Default IM host: {}", im_host);
@@ -136,7 +135,14 @@ pub fn config_setup_cli() -> Result<(), Box<dyn Error>> {
         im_api_key = llm_api_key.clone();
     }
 
-    genetate_config(&llm_host, &llm_api_key, &llm_model, &im_host, &im_api_key, &im_model);
+    genetate_config(
+        &llm_host,
+        &llm_api_key,
+        &llm_model,
+        &im_host,
+        &im_api_key,
+        &im_model,
+    );
 
     Ok(())
 }

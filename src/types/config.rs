@@ -23,13 +23,21 @@ pub struct AIConfig {
 
 impl Display for LLMConfig {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        write!(f, "Host: {}\nAPI Key: {}\nModel: {}", self.host, self.api_key, self.llm_model)
+        write!(
+            f,
+            "Host: {}\nAPI Key: {}\nModel: {}",
+            self.host, self.api_key, self.llm_model
+        )
     }
 }
 
 impl Display for IMConfig {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        write!(f, "Host: {}\nAPI Key: {}\nModel: {}", self.host, self.api_key, self.image_model)
+        write!(
+            f,
+            "Host: {}\nAPI Key: {}\nModel: {}",
+            self.host, self.api_key, self.image_model
+        )
     }
 }
 

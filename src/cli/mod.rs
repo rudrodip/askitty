@@ -3,10 +3,10 @@ mod repl;
 mod utils;
 
 use crate::ai::{im::traits::IM, llm::traits::LLM};
+use crate::setup::{self, config_setup_cli};
 use crate::storage::Storage;
 use crate::types::config::AIConfig;
 use crate::types::llm::Message;
-use crate::setup::{self, config_setup_cli};
 use config::Config;
 use std::error::Error;
 
@@ -26,7 +26,6 @@ where
         ai_config.im.image_model,
         ai_config.im.api_key,
     )?;
-
 
     match config.command {
         config::Command::Help => utils::print_help(),
