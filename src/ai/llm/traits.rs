@@ -3,7 +3,7 @@ use crate::types::llm::*;
 use std::future::Future;
 
 pub trait LLM {
-    fn new() -> Result<Self, LLMError>
+    fn new(host: String, model: String, api_key: String) -> Result<Self, LLMError>
     where
         Self: Sized;
     fn completion(
