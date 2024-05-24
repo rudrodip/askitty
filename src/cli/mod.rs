@@ -4,7 +4,9 @@ mod utils;
 
 use crate::ai::{im::traits::IM, llm::traits::LLM};
 use crate::storage::Storage;
+use crate::types::config::AIConfig;
 use crate::types::llm::Message;
+use crate::setup;
 use config::Config;
 use std::error::Error;
 
@@ -13,8 +15,18 @@ where
     L: LLM + 'static,
     I: IM + 'static,
 {
-    let llm_client = L::new()?;
-    let im_client = I::new()?;
+    let ai_config = setup::get_config().try_deserialize::<AIConfig>().unwrap();
+    let llm_client = L::new(
+        ai_config.llm.host,
+        ai_config.llm.llm_model,
+        ai_config.llm.api_key,
+    )?;
+    let im_client = I::new(
+        ai_config.im.host,
+        ai_config.im.image_model,
+        ai_config.im.api_key,
+    )?;
+
 
     match config.command {
         config::Command::Help => utils::print_help(),
