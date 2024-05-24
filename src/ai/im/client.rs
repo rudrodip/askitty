@@ -1,24 +1,21 @@
+use std::io::Write;
+
 use crate::ai::im::traits::IM;
 use crate::errors::ImageGenError;
-use crate::types::im::ImageGenResponse;
+use crate::types::im::ImageResponse;
 use reqwest::Client as HttpClient;
-use std::{env::var, io::Write};
 
 pub struct Client {
     pub host: String,
-    pub version: String,
+    pub model: String,
     pub api_key: String,
 }
 
 impl IM for Client {
-    fn new() -> Result<Self, ImageGenError> {
-        let host = var("REPLICATE_HOST").map_err(|e| ImageGenError::Other(e.to_string()))?;
-        let version =
-            var("IMAGE_MODEL_VERSION").map_err(|e| ImageGenError::Other(e.to_string()))?;
-        let api_key = var("REPLICATE_API_KEY").map_err(|e| ImageGenError::Other(e.to_string()))?;
+    fn new(host: String, model: String, api_key: String) -> Result<Self, ImageGenError> {
         Ok(Client {
             host,
-            version,
+            model,
             api_key,
         })
     }
@@ -26,50 +23,35 @@ impl IM for Client {
     async fn generate(&self, text: String) -> Result<(), ImageGenError> {
         let query = text.trim();
         let url = format!("{}", self.host);
-        let data = format!("{{\"version\": \"{}\",\"input\": {{\"width\": 768,\"height\": 768,\"prompt\": \"{}\",\"scheduler\": \"K_EULER\",\"num_outputs\": 1,\"guidance_scale\": 7.5,\"num_inference_steps\": 50}}}}", self.version, query);
-
+        let data = format!(
+            "{{\"model\": \"{}\",\"prompt\": \"{}\",\"n\": 1,\"size\": \"1024x1024\"}}",
+            self.model, query
+        );
         let client = HttpClient::new();
         let res = client
-            .post(&url)
+            .post(&format!("{}", format!("{}/images/generations", url)))
             .header("Content-Type", "application/json")
             .header("Authorization", format!("Bearer {}", self.api_key))
             .body(data)
             .send()
             .await?;
 
+        println!("Generating image...please wait");
         let body = res.text().await?;
-        let image_gen_response: ImageGenResponse = serde_json::from_str(&body)?;
-        let url = &image_gen_response.urls.get;
-        let mut count = 0;
+        let response: ImageResponse = serde_json::from_str(&body)?;
 
-        loop {
-            let res = client
-                .get(url)
-                .header("Authorization", format!("Bearer {}", self.api_key))
-                .send()
-                .await?;
-
-            let body = res.text().await?;
-            let image_gen_response: ImageGenResponse = serde_json::from_str(&body)?;
-
-            if image_gen_response.status == "succeeded" {
-                let image_url = image_gen_response.output.unwrap()[0].clone();
-                download_image(&image_url).await?;
-                std::process::Command::new("open")
-                    .arg("output.png")
-                    .output()
-                    .expect("failed to execute process");
-                break;
-            }
-
-            if count == 5 {
-                break;
-            }
-
-            count += 1;
-            std::thread::sleep(std::time::Duration::from_secs(1));
-            println!("Generating image...");
+        if response.data.len() == 0 {
+            println!("No image found");
+            return Err(ImageGenError::Other("No image found".to_string()));
         }
+
+        let image_url = response.data[0].url.clone();
+        println!("Image url: {}", image_url);
+
+        println!("Downloading image...");
+        download_image(&image_url).await?;
+
+        println!("Image downloaded successfully, opening image...");
 
         Ok(())
     }
