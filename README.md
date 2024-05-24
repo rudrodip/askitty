@@ -2,56 +2,97 @@
 
 ## Description
 
-A simple CLI tool to interact with generative models like llms and image generation apis.
+`askitty` is a simple CLI tool designed to interact with generative models like large language models (LLMs) and image generation APIs. The tool supports various features, including chat history, new chat session commands, global and individual system prompts, and more.
 
-LLM api - any LLM that follows opneai/v1 spec
+## Features
 
-Image generation api - any image gen api that follows opneai/v1 spec
+- **LLM API**: Supports any LLM that follows the OpenAI/v1 spec.
+- **Image Generation API**: Supports any image generation API that follows the OpenAI/v1 spec.
+- **Chat History**: View and manage chat history.
+- **Sessions**: Start new sessions, view existing sessions, and delete sessions.
+- **System Prompts**: Set and manage global and session-specific prompts.
+- **Configuration**: Set and view global configuration.
+- **Error Handling**: Robust error handling for a seamless experience.
+- **Markdown Preview**: Preview messages in Markdown format.
 
-Usage:
+## Installation
+
+To get started with `askitty`, you can use the following command to download and install the latest release:
+
+```bash
+curl -sSL https://askitty.rdsx.dev/install.sh | bash
+```
+
+## Usage
+
+Once installed, you can use `askitty` from the command line with the following syntax:
 
 ```bash
 askitty [FLAG] [MESSAGE]
 ```
 
-Flags:
+### Flags
+
+- `-h, --help`                          Display help message
+- `-v, --version`                       Display version
+- `-m, --message`                       Message to send to the model
+- `-i, --imagine`                       Generate image from text
+- `-r, --repl`                          Start a REPL
+- `-n, --new`                           Start a new session
+- `-s, --sessions`                      View all sessions
+- `-s <session_id>`                     View a specific session
+- `-d <session_id>`                     Delete a specific session
+- `-c, --clear`                         Clear all sessions
+- `-p, --prompt`                        Set global system prompt
+- `-p <session_id>`                     Set a specific session prompt
+- `-ps, --prompt-show`                  Show global system prompt
+- `-pc, --prompt-clear`                 Clear global system prompt
+- `-pd, --prompt-delete <session_id>`   Delete a specific session prompt
+- `-vc, --view-config`                  View global configuration
+- `-sc, --set-config`                   Set global configuration
+
+## Examples
+
+### Sending a Message to the Model
 
 ```bash
--h, --help                          Display help message
--v, --version                       Display version
--m, --message                       Message to send to the model
--i, --imagine                       Generate image from text
--r, --repl                          Start a repl
--n, --new                           Start a new session
--s, --sessions                      View all sessions
--s <session_id>                     View a specific session
--d <session_id>                     Delete a specific session
--c, --clear                         Clear all sessions
--p, --prompt                        Set global system prompt
--p <session_id>                     Set a specific session prompt
--ps, --prompt-show                  Show global system prompt
--pc, --prompt-clear                 Clear global system prompt
--pd, --prompt-delete <session_id>   Delete a specific session prompt              
--vc, --view-config                  View global configuration
--sc, --set-config                   Set global configuration
+askitty -m "Hello, how are you?"
 ```
 
-Todo
+### Generating an Image from Text
 
-- [x] openai api
-- [x] optional flags
-- [x] markdown preview
-- [x] image generation api
-- [x] error handling
-- [ ] streaming output
-- [x] chat history
-- [x] new chat session command
-- [x] view chat history command
-- [x] global system prompt
-- [x] individual system prompt
-- [x] set configuration command
-- [x] view configuration command
-- [x] kv store
-- [x] image path
-- [ ] tests
-- [x] documentation
+```bash
+askitty -i "A beautiful sunset over the mountains"
+```
+
+### Starting a New Session
+
+```bash
+askitty -n
+```
+
+### Viewing All Sessions
+
+```bash
+askitty -s
+```
+
+### Viewing a Specific Session
+
+```bash
+askitty -s <session_id>
+```
+
+### Setting a Global System Prompt
+
+```bash
+askitty -p "You are a helpful assistant."
+```
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
