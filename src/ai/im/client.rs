@@ -4,6 +4,7 @@ use crate::ai::im::traits::IM;
 use crate::errors::ImageGenError;
 use crate::types::im::ImageResponse;
 use reqwest::Client as HttpClient;
+use dirs::desktop_dir;
 
 pub struct Client {
     pub host: String,
@@ -22,6 +23,7 @@ impl IM for Client {
 
     async fn generate(&self, text: String) -> Result<(), ImageGenError> {
         let query = text.trim();
+        let path = desktop_dir().unwrap();
         let url = format!("{}", self.host);
         let data = format!(
             "{{\"model\": \"{}\",\"prompt\": \"{}\",\"n\": 1,\"size\": \"1024x1024\"}}",
@@ -49,19 +51,49 @@ impl IM for Client {
         println!("Image url: {}", image_url);
 
         println!("Downloading image...");
-        download_image(&image_url).await?;
 
-        println!("Image downloaded successfully, opening image...");
+        let filename = format!("{}.png", query);
+        download_image(&image_url, path.to_str().unwrap(), &filename).await?;
+
+        println!("Image downloaded successfully, saved to {}", path.to_str().unwrap());
+        open_image(format!("{}/{}", path.to_str().unwrap(), filename).as_str())?;
 
         Ok(())
     }
 }
 
-async fn download_image(url: &str) -> Result<(), ImageGenError> {
+async fn download_image(url: &str, path: &str, filename: &str) -> Result<(), ImageGenError> {
     let client = HttpClient::new();
     let res = client.get(url).send().await?;
     let body = res.bytes().await?;
-    let mut file = std::fs::File::create("output.png")?;
+    let mut file = std::fs::File::create(format!("{}/{}", path, filename))?;
     file.write_all(&body)?;
+    Ok(())
+}
+
+fn open_image(path: &str) -> Result<(), ImageGenError> {
+    let os = std::env::consts::OS;
+    
+    match os {
+        "macos" => {
+            let _ = std::process::Command::new("open")
+                .arg(path)
+                .output()
+                .expect("failed to open image");
+        }
+        "windows" => {
+            let _ = std::process::Command::new("explorer")
+                .arg(path)
+                .output()
+                .expect("failed to open image");
+        }
+        _ => {
+            let _ = std::process::Command::new("xdg-open")
+                .arg(path)
+                .output()
+                .expect("failed to open image");
+        }
+    }
+
     Ok(())
 }
