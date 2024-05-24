@@ -6,7 +6,7 @@ use crate::ai::{im::traits::IM, llm::traits::LLM};
 use crate::storage::Storage;
 use crate::types::config::AIConfig;
 use crate::types::llm::Message;
-use crate::setup;
+use crate::setup::{self, config_setup_cli};
 use config::Config;
 use std::error::Error;
 
@@ -50,6 +50,8 @@ where
             utils::delete_session_system_prompt(&storage, &session_id)
         }
         config::Command::Imagine(prompt) => Ok(im_client.generate(prompt).await?),
+        config::Command::ViewConfig => utils::view_config(),
+        config::Command::SetConfig => config_setup_cli(),
     }
 }
 
