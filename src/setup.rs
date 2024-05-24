@@ -1,7 +1,7 @@
 use crate::storage::KvStore;
 use config::{Config, File};
 use dirs::config_dir;
-use std::path::PathBuf;
+use std::{error::Error, path::PathBuf};
 
 pub fn initialize_storage() -> KvStore {
     let db_path = PathBuf::from("./data/db");
@@ -21,7 +21,7 @@ pub fn get_config() -> Config {
 
     // if no config file exists, generate one
     if !config_path.exists() {
-        config_setup_cli();
+        let _ = config_setup_cli();
     }
 
     config_builder
@@ -63,7 +63,7 @@ image_model = "{}"
     std::fs::write(config_path, config).expect("Failed to write config file");
 }
 
-pub fn config_setup_cli() {
+pub fn config_setup_cli() -> Result<(), Box<dyn Error>> {
     let mut llm_host = String::from("https://api.openai.com/v1");
     let mut llm_model = String::from("gpt-4");
     let llm_api_key;
@@ -137,4 +137,6 @@ pub fn config_setup_cli() {
     }
 
     genetate_config(&llm_host, &llm_api_key, &llm_model, &im_host, &im_api_key, &im_model);
+
+    Ok(())
 }
