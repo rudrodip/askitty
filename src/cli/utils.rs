@@ -1,6 +1,8 @@
-use crate::types::llm::Session;
+use crate::types::{config::AIConfig, llm::Session};
 use crate::Storage;
 use std::{error::Error, fs};
+use config::{Config, File};
+use dirs::config_dir;
 
 pub fn print_help() -> Result<(), Box<dyn Error>> {
     println!("Usage: askitty [FLAG] [MESSAGE]");
@@ -213,4 +215,18 @@ pub fn delete_session_system_prompt(
         }
         Err(e) => Err(Box::new(e) as Box<dyn Error>),
     }
+}
+
+pub fn view_config() -> Result<(), Box<dyn Error>>{
+    let config_builder = Config::builder();
+    let config_dir = config_dir().expect("Failed to get config directory");
+    let config_path = config_dir.join(format!("{}/ai.toml", "askitty"));
+
+    let s = config_builder
+        .add_source(File::from(config_path))
+        .build()?;
+
+    let config = s.try_deserialize::<AIConfig>()?;
+    println!("{}", config);
+    Ok(())
 }
