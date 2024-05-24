@@ -7,7 +7,7 @@ pub struct Completion {
     pub object: String,
     pub created: i64,
     pub model: String,
-    pub system_fingerprint: String,
+    pub system_fingerprint: Option<String>,
     pub choices: Vec<Choice>,
     pub usage: Usage,
 }
