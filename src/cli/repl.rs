@@ -79,7 +79,7 @@ async fn repl_loop<L: LLM>(
         });
 
         storage
-            .set(&session.id, &session)
+            .set(format!("sessions/{}", &session.id).as_str(), &session)
             .map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
         termimad::print_text(&response);

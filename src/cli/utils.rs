@@ -91,7 +91,6 @@ pub fn show_session(storage: &impl Storage, session_id: &str) -> Result<(), Box<
             println!("{}", session);
             println!("System prompt: {}", session.system_prompt);
 
-            // print the history
             for message in session.history {
                 println!("{}", message);
             }
