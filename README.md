@@ -4,8 +4,9 @@
 
 A simple CLI tool to interact with generative models like llms and image generation apis.
 
-LLM api - [groq](https://groq.com/)
-Image generation api - [stable diffusion](https://replicate.com/stability-ai/stable-diffusion)
+LLM api - any LLM that follows opneai/v1 spec
+
+Image generation api - any image gen api that follows opneai/v1 spec
 
 Usage:
 
@@ -19,6 +20,7 @@ Flags:
 -h, --help                          Display help message
 -v, --version                       Display version
 -m, --message                       Message to send to the model
+-i, --imagine                       Generate image from text
 -r, --repl                          Start a repl
 -n, --new                           Start a new session
 -s, --sessions                      View all sessions
@@ -30,12 +32,13 @@ Flags:
 -ps, --prompt-show                  Show global system prompt
 -pc, --prompt-clear                 Clear global system prompt
 -pd, --prompt-delete <session_id>   Delete a specific session prompt              
--i, --imagine                       Generate image from text
+-vc, --view-config                  View global configuration
+-sc, --set-config                   Set global configuration
 ```
 
 Todo
 
-- [x] groq api
+- [x] openai api
 - [x] optional flags
 - [x] markdown preview
 - [x] image generation api
@@ -46,14 +49,9 @@ Todo
 - [x] view chat history command
 - [x] global system prompt
 - [x] individual system prompt
-- [ ] set configuration command
-- [ ] view configuration command
-- [ ] pretty print
+- [x] set configuration command
+- [x] view configuration command
 - [x] kv store
-- [ ] config store
-- [ ] image path
-- [ ] context strategy [sliding window, fixed window, summarize context, etc]
-- [ ] function calling from scratch
-- [ ] utils - writing LICENSE, SEO image resizing, etc
+- [x] image path
 - [ ] tests
-- [ ] documentation
+- [x] documentation
