@@ -55,14 +55,37 @@
         <a href="https://github.com/rudrodip/askitty" target="_blank">github</a>
         <a href="https://x.com/rds_agi" target="_blank">x</a>
         <a href="./doc/askitty/index.html">docs</a>
+        <a href="https://github.com/rudrodip/askitty/releases" target="_blank"
+          >releases</a
+        >
       </div>
-
-      <div style="font-size: 0.9rem;">
-        <p>Usage:</p>
+      <p>Install (mac only)</p>
+      <div class="codeblock">
+        <pre><code class="lang-bash">curl -sSL https://askitty.rdsx.dev/install.sh | bash</code></pre>
+        <button id="copy-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-copy"
+          >
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+          </svg>
+        </button>
+      </div>
+      <div style="font-size: 0.9rem">
+        <p style="text-decoration: underline; margin-bottom: 5px;">Usage:</p>
         <pre><code class="lang-bash">askitty <span class="hljs-string">[FLAG]</span> <span class="hljs-string">[MESSAGE]</span>
 </code></pre>
-<br />
-        <p>Flags:</p>
+        <br />
+        <p style="text-decoration: underline; margin-bottom: 5px;">Flags:</p>
         <pre><code class="lang-bash">-<span class="ruby">h, --help                          Display help message
 </span>-<span class="ruby">v, --version                       Display version
 </span>-<span class="ruby">m, --message                       Message to send to the model
@@ -84,4 +107,19 @@
       </div>
     </main>
   </body>
+  <script>
+    const copyButton = document.getElementById("copy-button");
+    const codeBlock = document.querySelector(".codeblock code");
+
+    copyButton.addEventListener("click", () => {
+      navigator.clipboard.writeText(codeBlock.innerText);
+      copyButton.innerHTML = tickSvg;
+      setTimeout(() => {
+        copyButton.innerHTML = copySvg;
+      }, 1500);
+    });
+
+    const copySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>`
+    const tickSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>`
+  </script>
 </html>

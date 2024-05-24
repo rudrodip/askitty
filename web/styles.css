@@ -50,3 +50,26 @@ p {
   color: rgb(35, 157, 227);
   text-decoration: underline;
 }
+
+.codeblock {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(73, 73, 73);
+  border: 1px solid gray;
+  align-items: center;
+  padding: 1rem;
+}
+
+.codeblock button {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  background-color: rgb(55, 54, 54);
+  border: none;
+  outline: none;
+  color: antiquewhite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+}
