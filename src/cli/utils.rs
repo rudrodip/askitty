@@ -3,15 +3,34 @@ use crate::Storage;
 use config::{Config, File};
 use dirs::config_dir;
 use std::{error::Error, fs};
+use termimad;
 
 pub fn print_help() -> Result<(), Box<dyn Error>> {
-    println!("Usage: askitty [FLAG] [MESSAGE]");
-    println!();
-    println!("Flags:");
-    println!(" -h, --help Display help message");
-    println!(" -v, --version Display version");
-    println!(" -m, --message Message to send to the model");
-    println!(" -i, --imagine Generate image from text");
+    let readme = "
+    ```bash
+    askitty [FLAG] [MESSAGE]
+    ```
+    
+    ### Flags
+    
+    - `-h, --help`                          Display help message
+    - `-v, --version`                       Display version
+    - `-m, --message`                       Message to send to the model
+    - `-i, --imagine`                       Generate image from text
+    - `-r, --repl`                          Start a REPL
+    - `-n, --new`                           Start a new session
+    - `-s, --sessions`                      View all sessions
+    - `-s <session_id>`                     View a specific session
+    - `-d <session_id>`                     Delete a specific session
+    - `-c, --clear`                         Clear all sessions
+    - `-p, --prompt`                        Set global system prompt
+    - `-p <session_id>`                     Set a specific session prompt
+    - `-ps, --prompt-show`                  Show global system prompt
+    - `-pc, --prompt-clear`                 Clear global system prompt
+    - `-pd, --prompt-delete <session_id>`   Delete a specific session prompt
+    - `-vc, --view-config`                  View global configuration
+    - `-sc, --set-config`                   Set global configuration";
+    termimad::print_text(&readme);
     Ok(())
 }
 
