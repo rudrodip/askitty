@@ -1,5 +1,7 @@
 # askitty
 
+![askitty](https://github.com/rudrodip/askitty/assets/77154365/e7a832f5-a45b-4999-b762-77a19992614e)
+
 ## Description
 
 `askitty` is a simple CLI tool designed to interact with generative models like large language models (LLMs) and image generation APIs. The tool supports various features, including chat history, new chat session commands, global and individual system prompts, and more.
