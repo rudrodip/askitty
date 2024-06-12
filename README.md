@@ -6,6 +6,8 @@
 
 `askitty` is a simple CLI tool designed to interact with generative models like large language models (LLMs) and image generation APIs. The tool supports various features, including chat history, new chat session commands, global and individual system prompts, and more.
 
+Check out this [demo](https://x.com/rds_agi/status/1793998351782007104) video
+      
 ## Features
 
 - **LLM API**: Supports any LLM that follows the OpenAI/v1 spec.
